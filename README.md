@@ -1,6 +1,6 @@
 
 # RChainer
-[![GitHub stars](https://img.shields.io/github/stars/ht0Ruial/RChainer)](https://github.com/ht0Ruial/RChainer/stargazers) [![GitHub forks](https://img.shields.io/github/forks/ht0Ruial/RChainer)](https://github.com/ht0Ruial/RChainer/network) [![GitHub release](https://img.shields.io/github/release/ht0Ruial/RChainer.svg)](https://github.com/ht0Ruial/RChainer/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/ht0Ruial/RChainer)](https://github.com/ht0Ruial/RChainer/stargazers) [![GitHub forks](https://img.shields.io/github/forks/ht0Ruial/RChainer)](https://github.com/ht0Ruial/RChainer/network) [![GitHub issues](https://img.shields.io/github/issues/ht0Ruial/RChainer)](https://github.com/ht0Ruial/RChainer/issues)
 
 + 适用于GameGuardian的动态基址获取工具，支持自动检验可行链路、自定义判断条件和导出基址脚本。
 

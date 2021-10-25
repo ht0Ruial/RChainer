@@ -81,10 +81,10 @@ local ac_ = gg.getResults(1)[1]
 local ac_flags = ac_.flags
 local ac_value = ac_.value
 
-local depth, maxOffset, level, out
+local depth, minOffset, maxOffset, level, out
 
 function loadChain(lvl, p)
-    local fix, maxo, lev = not x64, maxOffset, level
+    local fix, mino, maxo, lev = not x64, minOffset, maxOffset, level
     for k = lvl, 1, -1 do
         local levk, p2, stop = lev[k], {}, true
         for j, u in pairs(p) do
@@ -93,7 +93,7 @@ function loadChain(lvl, p)
                 if fix then u.value = u.value & 0xFFFFFFFF end
                 for i, v in ipairs(levk) do
                     local offset = v.address - u.value
-                    if offset >= 0 and offset <= maxo then
+                    if offset >= mino and offset <= maxo then
                         u.offset[offset], p2[v], stop = v, v, false
                     end
                 end
@@ -150,9 +150,9 @@ if pkg == nil then pkg = 'none' end
 gg.setVisible(false)
 while true do
     local def = cfg[pkg]
-    if def == nil then def = {3, 256} end
-    local p =
-        gg.prompt({'深度', '最大偏移量'}, def, {'number', 'number'})
+    if def == nil then def = {3, 0, 256} end
+    local p = gg.prompt({'深度', '最小偏移量', '最大偏移量'}, def,
+                        {'number', 'number', 'number'})
 
     if p == nil then
         gg.setVisible(true)
@@ -162,7 +162,8 @@ while true do
     gg.saveVariable(cfg, cfg_file)
 
     depth = p[1]
-    maxOffset = tonumber(p[2])
+    minOffset = tonumber(p[2])
+    maxOffset = tonumber(p[3])
 
     level, out = {}, {}
 
@@ -244,12 +245,12 @@ while true do
     end
 
     x = string.format('%.2f', os.clock() - x)
-    print(depth, maxOffset, x)
+    print(depth, minOffset, maxOffset, x)
 
     local chains = #last_table / 2
     p = gg.alert('在' .. x .. '秒内找到了' .. chains .. '条链路 (' ..
-                     depth .. ', ' .. maxOffset .. '):' .. chain, '保存',
-                 '重试', '退出')
+                     depth .. ', ' .. minOffset .. ', ' .. maxOffset .. '):' ..
+                     chain, '保存', '重试', '退出')
     if p == 1 then break end
     if p ~= 2 then
         print(last_table)
@@ -329,9 +330,11 @@ end
 local script = gg.getFile():gsub('[^/]*$', '') .. ti.packageName
 for i = 1, 1000 do
     local f = io.open(script .. i .. "-" .. string.format('%s', depth) .. "-" ..
+                          string.format('%s', minOffset) .. "-" ..
                           string.format('%s', maxOffset) .. '.lua')
     if f == nil then
         script = script .. i .. "-" .. string.format('%s', depth) .. "-" ..
+                     string.format('%s', minOffset) .. "-" ..
                      string.format('%s', maxOffset) .. '.lua';
         break
     end
